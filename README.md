@@ -4,6 +4,8 @@
 Esta clase te permitirá trabajar con un formato de configuración sencillo y versátil para tus aplicaciones. A continuación, te proporcionaré una guía paso a paso para aprovechar al máximo esta herramienta.
 
 
+## For English translation please refer to [README_EN.md](README_EN.md)
+
 ### 1. Introducción a Kvp
 
 La clase Kvp *(Clave-Valor)* facilita la lectura y manipulación de archivos de configuración en formato KVP. Este formato es una alternativa ligera y fácil de entender a otros como JSON, TOML o YAML.
