@@ -1,0 +1,17 @@
+-- COMENTARIO --
+nombre = "Pedro" -- este sería el atributo 1
+apellido = 'Gozalez' -- este sería el atributo 2
+salario = 1500 -- number
+bono = 850.65 -- number
+debug = .F.
+casado = .T.
+prg_principal = "c:\a1\prueba\principal.prg"
+divorciado = .F.
+hijos = 4
+comentarios = $("tiene " + alltrim(str(this.hijos)) + " hijos")
+fecha = $(date())
+ruta_formularios = $(iif(this.debug, "c:\a1\", "c:\a2\"))
+solo_prg = $(JUSTFNAME(this.prg_principal))
+solo_ruta = $(JUSTPATH(this.prg_principal))
+usuario = "cm9vdA=="
+password = "c2lzdGVtYTEyMw=="
