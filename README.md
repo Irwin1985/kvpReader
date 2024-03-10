@@ -4,6 +4,7 @@
 Esta clase te permitirá trabajar con un formato de configuración sencillo y versátil para tus aplicaciones. A continuación, te proporcionaré una guía paso a paso para aprovechar al máximo esta herramienta.
 
 This library is part of the [VFPX](https://github.com/VFPX) project.
+
 ![](vfpxmember_large.gif)
 
 ## For English translation please refer to [README_EN.md](README_EN.md)
