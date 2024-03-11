@@ -3,4 +3,8 @@ nombre  = "Mi Aplicación"
 version = "1.0"
 entorno = "desarrollo"
 debug   = .T.
+fullname = $(this.nombre + ', ' + this.apellido)
+apellido = "Rodríguez"
 ruta    = $(IIF(this.entorno == "desarrollo","C:\Desarrollo\","C:\Produccion\"))
+usuarios = get("https://jsonplaceholder.typicode.com/users")
+persona = json('{"nombre": "Irwin Rodríguez", "edad": 38, "casado": true, "soltero": false, "dirvorciado": null, "lenguajes": ["Chino", "Inglés", "Español"]}')

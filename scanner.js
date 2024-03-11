@@ -1,5 +1,5 @@
 /********************************************************************
- * TOKENIZER
+* TOKENIZER
 ********************************************************************/
 // Tokenizer spec.
 var Spec = [
@@ -46,6 +46,10 @@ var Spec = [
     // --------------------------------------
     // Expressions
     [/^\$\(.+\)/,'EXPRESSION'],
+
+    // --------------------------------------
+    // Builtin functions
+    [/^\w+\((.*?)\)/, 'BUILTIN'],
 
     // --------------------------------------
     [/^\[/, 'LBRACKET'],
@@ -167,8 +171,8 @@ function _matchRegEx(regexp, string) {
 }
 
 /********************************************************************
- * PARSER
- ********************************************************************/
+* PARSER
+********************************************************************/
 function parse(source, debug) {
     var tokens = _scanTokens(source);
         
@@ -179,12 +183,12 @@ function parse(source, debug) {
             oKvp.AddToken(tokens[i].type, tokens[i].value);
         }
     }
-    
-    //return tokens;
 }
 /*
 var source = `
 deportes = ["Baloncesto", .T., .F., $(this.'nombre largo')]
+usuarios = get("http://localhost:8080/users")
+personas = json('{"nombre": "Irwin"}')
 `;
-console.log(parse(source, true));
+parse(source, true);
 */
