@@ -8,3 +8,9 @@ apellido = "Rodríguez"
 ruta    = $(IIF(this.entorno == "desarrollo","C:\Desarrollo\","C:\Produccion\"))
 usuarios = get("https://jsonplaceholder.typicode.com/users")
 persona = json('{"nombre": "Irwin Rodríguez", "edad": 38, "casado": true, "soltero": false, "dirvorciado": null, "lenguajes": ["Chino", "Inglés", "Español"]}')
+token-domain = "http://localhost:8080/"
+token-method = "POST"
+token-via = "BODY"
+token-user = "Irwin"
+token-pwd = "1234"
+token-json = $('{"usuario":this.user,"clave":this.pwd}')

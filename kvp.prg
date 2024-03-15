@@ -89,6 +89,7 @@ Define Class Kvp as collection
 		If Empty(tcConfigFile)
 			Return
 		EndIf
+		this.cLastError = ''
 		Try
 			Local lcContent, i, lcKey, lcValue, lcLine, lvValue, loSubMatch, loGroups, lcGroupValue, loExpressions
 
@@ -149,6 +150,9 @@ Define Class Kvp as collection
 				EndIf				
 
 				If !Empty(lcKey)
+					If this.GetKey(lcKey) > 0
+						this.Remove(this.GetKey(lcKey))
+					EndIf
 					this.Add(lvValue, lcKey)
 					Store '' to lvValue, lcKey
 				EndIf
@@ -236,13 +240,16 @@ Define Class Kvp as collection
 		endcase		
 	EndFunc
 
-	Hidden function parseJson(tcJson)
+	Hidden function parseJson(tcJson)	
 		If Type('_screen.json') != 'O'
-			this.cLastError = 'Third party lib not found: JSONFox.app'
-			If this.bShowErrors
-				MessageBox(this.cLastError, 16, "KVP Reader error")
+			If !File('JSONFox.app')
+				this.cLastError = 'Third party lib not found: JSONFox.app'
+				If this.bShowErrors
+					MessageBox(this.cLastError, 16, "KVP Reader error")
+				EndIf
+				Return .null.
 			EndIf
-			Return .null.
+			Do JsonFox.app
 		EndIf
 		Local loResult, loArray
 		loResult = _screen.json.parse(tcJson)
@@ -355,7 +362,7 @@ var Spec = [
 
     // --------------------------------------
     // Key
-    [/[a-zA-Z_αινσϊ ]+/, 'IDENT']
+    [/[a-zA-Z_αινσϊ \-_\.#]+/, 'IDENT']
 ];
 
 var _scannerString;

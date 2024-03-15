@@ -58,7 +58,7 @@ var Spec = [
 
     // --------------------------------------
     // Key
-    [/[a-zA-Z_áéíóú ]+/, 'IDENT']
+    [/[a-zA-Z_áéíóú \-_\.#]+/, 'IDENT']
 ];
 
 var _scannerString;
@@ -184,11 +184,8 @@ function parse(source, debug) {
         }
     }
 }
-/*
+
 var source = `
-deportes = ["Baloncesto", .T., .F., $(this.'nombre largo')]
-usuarios = get("http://localhost:8080/users")
-personas = json('{"nombre": "Irwin"}')
+token-method       = "POST"
 `;
 parse(source, true);
-*/
