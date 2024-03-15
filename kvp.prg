@@ -232,6 +232,24 @@ Define Class Kvp as collection
 				Return loResult
 			EndIf
 			Return this.parseJson(lcParam)
+		Case lcFuncName == 'decode'
+			If Empty(lcParam)
+				this.cLastError = 'No parameters found.'
+				If this.bShowErrors
+					MessageBox(this.cLastError, 16, "KVP Reader error")
+				EndIf
+				Return loResult
+			EndIf
+			Return strconv(lcParam, 14)
+		Case lcFuncName == 'encode'
+			If Empty(lcParam)
+				this.cLastError = 'No parameters found.'
+				If this.bShowErrors
+					MessageBox(this.cLastError, 16, "KVP Reader error")
+				EndIf
+				Return loResult
+			EndIf
+			Return strconv(lcParam, 13)
 		Otherwise
 			this.cLastError = 'Unknown builtin function: '+lcFuncName
 			If this.bShowErrors

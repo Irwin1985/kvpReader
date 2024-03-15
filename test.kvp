@@ -13,4 +13,6 @@ token-method = "POST"
 token-via = "BODY"
 token-user = "Irwin"
 token-pwd = "1234"
+clave = decode("aXJ3aW4xMjM=")
+usuario = encode("mi usuario secreto")
 token-json = $('{"usuario":this.user,"clave":this.pwd}')
