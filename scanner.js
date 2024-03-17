@@ -58,7 +58,7 @@ var Spec = [
 
     // --------------------------------------
     // Key
-    [/[a-zA-Z_áéíóú \-_\.#]+/, 'IDENT']
+    [/[a-zA-Z_0-9áéíóúÁÉÍÓÚ \-_\.#]+/, 'IDENT']
 ];
 
 var _scannerString;
@@ -186,6 +186,100 @@ function parse(source, debug) {
 }
 
 var source = `
-token-method       = "POST"
+--************************************************--
+-- Datos de conexión --
+-- Base de datos: MySQL / MariaDB
+-- NOTA: los datos sensibles están encriptados.
+-- si desea cambiar de motor, cambie el valor
+-- de engine a: MySQL, MariaDB, MSSQL, SQLite
+-- PostGreSQL, Firebird
+--************************************************--
+
+current_engine = "mysql" -- cambiar aquí el motor
+
+-- CONFIGURACIÓN PARA MYSQL --
+mysql.engine = "MySQL"
+mysql.driver = "MySQL ODBC 5.1 Driver"
+mysql.server = decode("bG9jYWxob3N0")
+mysql.database = decode("c2lzdGVtYV9hZA==")
+mysql.user = decode("cm9vdA==")
+mysql.password = decode("MTIzNA==")
+mysql.port = decode("MzMwNg==")
+--FIN DE LA CONFIGURACIÓN PARA MYSQL--
+
+-- CONFIGURACIÓN PARA MARIADB --
+mariadb.engine = "MariaDB"
+mariadb.driver = "MariaDB ODBC 3.1 Driver"
+mariadb.server = decode("bG9jYWxob3N0")
+mariadb.database = decode("c2lzdGVtYV9hZA==")
+mariadb.user = decode("cm9vdA==")
+mariadb.password = decode("MTIzNA==")
+mariadb.port = decode("MzMwOQ==")
+--FIN DE LA CONFIGURACIÓN PARA MARIADB--
+
+--CONFIGURACIÓN PARA SQL SERVER--
+mssql.engine = "MSSQL"
+mssql.driver = "SQL Server Native Client 11.0"
+mssql.server = decode("UEMtSVJXSU5cU1FMSVJXSU4=")
+mssql.database = decode("c2lzdGVtYV9hZA==")
+mssql.user = decode("c2E=")
+mssql.password = decode("U3ViaWZvcjIwMTI=")
+--FIN DE LA CONFIGURACIÓN PARA MSSQL--
+
+-- CONFIGURACIÓN PARA LOS ÍNDICES --
+
+-- USUARIOS --
+usuarios.index1.expression = clave
+usuarios.index1.tag = clave
+
+usuarios.index1.expression = usuario
+usuarios.index1.tag = usuario
+
+-- CLIENTES --
+clientes.index1.expression = folio
+clientes.index1.tag = folio
+
+clientes.index2.expression = ncompleto
+clientes.index2.tag = ncompleto
+
+clientes.index3.expression = fecha_alta
+clientes.index3.tag = fecha_alta
+
+-- MOROSOS --
+morosos.index1.expression = folioc
+morosos.index1.tag = folioc
+
+-- PAGOS --
+pagos.index1.expression = cajero
+pagos.index1.tag = cajero
+
+pagos.index2.expression = fecha
+pagos.index2.tag = fecha
+
+pagos.index3.expression = folioc
+pagos.index3.tag = folioc
+
+pagos.index4.expression = recibo
+pagos.index4.tag = recibo
+
+pagos.index5.expression = fpago
+pagos.index5.tag = fpago
+
+-- DINERO --
+dinero.index1.expression = fecha
+dinero.index1.tag = fecha
+
+dinero.index2.expression = fecha1
+dinero.index2.tag = fecha1
+
+dinero.index3.expression = tipo_entra
+dinero.index3.tag = tipo_entra
+
+-- MES --
+mes.index1.expression = tipo
+mes.index1.tag = tipo
+
+mes.index2.expression = num
+mes.index2.tag = num
 `;
 parse(source, true);
