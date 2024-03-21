@@ -121,7 +121,8 @@ Define Class Kvp as collection
 					Loop
 				EndIf
 
-				If loToken.cType == 'LBRACKET'
+				Do Case
+				case loToken.cType == 'LBRACKET'
 					i = i + 1 && skip LBRACKET ([)
 					lvValue = CreateObject("Collection")
 					If this.oTokens(i).cType != 'RBRACKET'
@@ -135,19 +136,17 @@ Define Class Kvp as collection
 							i = i + 1
 						EndDo
 					EndIf
-					i = i + 1 && skip RBRACKET (])					
-				EndIf
-				If loToken.cType == 'EXPRESSION'
+					* RBRACKET will be consumed automatically by the FOR stmt.
+					*i = i + 1 && skip RBRACKET (])
+				Case loToken.cType == 'EXPRESSION'
 					loExpressions.Add(loToken, lcKey)
 					lvValue = .null.
-				EndIf
-
-				If loToken.cType == 'BUILTIN'
+				case loToken.cType == 'BUILTIN'
 					lvValue = this.parseBuiltin(loToken)
-				Else
+				Otherwise
 					* Extract scalar value
 					lvValue = loToken.cValue
-				EndIf				
+				EndCase
 
 				If !Empty(lcKey)
 					If this.GetKey(lcKey) > 0
