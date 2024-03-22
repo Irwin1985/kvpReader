@@ -126,6 +126,7 @@ Define Class Kvp as collection
 
 				Do Case
 				case loToken.cType == 'LBRACKET'
+					Set Step On
 					i = i + 1 && skip LBRACKET ([)
 					lvValue = CreateObject("Collection")
 					If this.oTokens(i).cType != 'RBRACKET'
@@ -370,7 +371,7 @@ var Spec = [
 
     // --------------------------------------
     // Expressions
-    [/^\$\(.+\)/,'EXPRESSION'],
+    [/^\$\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)/,'EXPRESSION'],
 
     // --------------------------------------
     // Builtin functions
