@@ -50,7 +50,8 @@ Define Class Kvp as collection
 	Hidden oScript, oTokens
 	cLastError = ''
 	bShowErrors = .f.
-	
+	oKeys = .null.
+
 	Procedure init(tcConfigFile)	
 		If !Empty(tcConfigFile)
 			this.Parse(tcConfigFile)
@@ -66,23 +67,24 @@ Define Class Kvp as collection
 	endproc
 
 	Function Get(tvIndexOrKey)
-		nodefault
 		If Empty(this.count) or Empty(tvIndexOrKey) or !InList(Type('tvIndexOrKey'), 'N', 'C')
 			Return Space(1)
 		EndIf
-		
-		Local lnIndex, loItem
-		lnIndex = 0
-		loItem = Space(1)
+		Return this.item(tvIndexOrKey)
+	EndFunc
+
+	Function item(tvIndexOrKey)
+		nodefault
+		Local lnIndex
 		If Type('tvIndexOrKey') == 'C'
 			lnIndex = this.GetKey(Lower(tvIndexOrKey))
 		Else
 			lnIndex = tvIndexOrKey
 		EndIf
 		If !Between(lnIndex, 1, this.Count)
-			Return loItem
+			Return Space(1)
 		EndIf
-		Return this.Item(lnIndex)
+		Return DoDefault(lnIndex)
 	EndFunc
 	
 	procedure parse(tcConfigFile as memo)
@@ -94,6 +96,7 @@ Define Class Kvp as collection
 			Local lcContent, i, lcKey, lcValue, lcLine, lvValue, loSubMatch, loGroups, lcGroupValue, loExpressions
 
 			lcContent = Iif(File(tcConfigFile), Strconv(Filetostr(tcConfigFile),11), tcConfigFile)
+			this.oKeys = CreateObject("Collection")
 			this.oTokens = CreateObject("Collection")
 			this.oScript = Createobject([MSScriptcontrol.scriptcontrol.1])
 			this.oScript.Language = "JScript"
@@ -153,14 +156,15 @@ Define Class Kvp as collection
 						this.Remove(this.GetKey(lcKey))
 					EndIf
 					this.Add(lvValue, lcKey)
+					this.oKeys.Add(lcKey)
 					Store '' to lvValue, lcKey
 				EndIf
 			EndFor
-			* Evaluate expressions
+			* Evaluate all previous collected expressions
 			For i=1 to loExpressions.count
 				lcKey = loExpressions.GetKey(i)
 				loExp = loExpressions.Item(i)
-				this.Remove(lcKey)
+				this.Remove(lcKey)				
 				this.Add(this.parseValue(loExp), lcKey)
 			EndFor
 		Catch to loEx
