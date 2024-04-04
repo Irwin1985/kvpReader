@@ -45,7 +45,7 @@ var Spec = [
 
     // --------------------------------------
     // Expressions
-    [/^\$\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)/,'EXPRESSION'],
+    [/^\$\(.+\)/,'EXPRESSION'],
 
     // --------------------------------------
     // Builtin functions
@@ -134,7 +134,7 @@ function _getNextToken() {
                 var matchCollection;
                 var replaceWith;
                 literal = tokenValue.slice(2, -1);
-                while ((matchCollection = /this\.(\w+|(["'])([^"']*)\2)/.exec(literal)) !== null) {
+                while ((matchCollection = /[Tt][Hh][Ii][Ss]\.(\w+|(["'])([^"']*)\2)/.exec(literal)) !== null) {
                     if (/^["']/.test(matchCollection[1])) {
                         replaceWith = matchCollection[1].slice(1, -1);
                     } else {
@@ -184,8 +184,25 @@ function parse(source, debug) {
         }
     }
 }
-
 var source = `
-PRUEBA = [$(DATE(2001,12,31)),.F.,"FECHA DE CAMBIO AL EURO EN EL PROGRAMA","D",.T.,$(DATE(2001,12,31))]
+-------------------- PROPIEDADES AUXILIARES --------------------
+TOP = $(_SCREEN.UTILIDADES.EJECUTARSBSCRIPT("ALTO-DISPONIBLE"))
+UBICACION = $(P_DIRECTO + '\GRAFICO\')
+----------------------------------------------------------------
+
+-- LISTADO DE LOGOS ADICIONALES
+LOGO1.NOMBRE    = "logo-kit-digital-1.png"
+LOGO1.UBICACION = $(THIS.UBICACION)
+LOGO1ANCHO      = 300
+LOGO1.ALTO      = 97
+LOGO1.LEFT      = 0
+LOGO1.TOP       = $(THIS.TOP)
+
+LOGO2.NOMBRE    = "logo-kit-digital-2.png"
+LOGO2.UBICACION = $(THIS.UBICACION)
+LOGO2.ANCHO     = 336
+LOGO2.ALTO      = 189
+LOGO2.LEFT      = $(THIS.LOGO1ANCHO)
+LOGO2.TOP       = $(THIS.TOP)
 `;
 parse(source, true);

@@ -1,3 +1,69 @@
+*!*	TEXT TO lcCode NOSHOW
+*!*	  -------------------- PROPIEDADES AUXILIARES --------------------
+*!*	  TOP = 20
+*!*	  UBICACION = 'C:\VCOOPE\GRAFICO\'
+*!*	  ----------------------------------------------------------------
+
+*!*	  -- LISTADO DE LOGOS ADICIONALES
+*!*	  LOGO1.NOMBRE    = "logo-kit-digital-1.png"
+*!*	  LOGO1.UBICACION = $(THIS.UBICACION)
+*!*	  LOGO1.ANCHO     = 300
+*!*	  LOGO1.ALTO      = 97
+*!*	  LOGO1.LEFT      = 0
+*!*	  LOGO1.TOP       = $(THIS.TOP)
+
+*!*	  LOGO2.NOMBRE    = "logo-kit-digital-2.png"
+*!*	  LOGO2.UBICACION = $(THIS.UBICACION)
+*!*	  LOGO2.ANCHO     = 336
+*!*	  LOGO2.ALTO      = 189
+*!*	  LOGO2.LEFT      = $(THIS."LOGO1.ANCHO"+8)
+*!*	  LOGO2.TOP       = $(THIS.TOP)
+*!*	ENDTEXT
+
+*!*	loKvp = CreateObject("Kvp", lcCode)
+*!*	IF loKvp.count > 0
+*!*		
+*!*		LOCAL i, lcNombre, loCtx, lcControlName, loControl, lcFile
+*!*		i = 1
+*!*		loCtx = _screen
+*!*		DO WHILE .T.
+*!*			lcControlName = 'dynamicImage' + ALLTRIM(STR(i))
+*!*			lcNombre = loKvp.Get("LOGO" + ALLTRIM(STR(i))+".NOMBRE")
+*!*			IF EMPTY(lcNombre)
+*!*				EXIT
+*!*			ENDIF
+*!*			lcUbicacion = loKvp.Get("LOGO" + ALLTRIM(STR(i))+".UBICACION")
+*!*			lnAncho = loKvp.Get("LOGO" + ALLTRIM(STR(i))+".ANCHO")
+*!*			lnAlto = loKvp.Get("LOGO" + ALLTRIM(STR(i))+".ALTO")
+*!*			lnLeft = loKvp.Get("LOGO" + ALLTRIM(STR(i))+".LEFT")
+*!*			lnTop = loKvp.Get("LOGO" + ALLTRIM(STR(i))+".TOP")
+*!*			lcFile = lcUbicacion + lcNombre
+*!*			IF !FILE(lcFile)
+*!*				LOOP
+*!*			ENDIF
+*!*			*----------
+*!*			TRY
+*!*				loCtx.RemoveObject(lcControlName)
+*!*			CATCH
+*!*			ENDTRY
+*!*			loCtx.AddObject(lcControlName, "Image")
+*!*			loControl = EVALUATE("loCtx." + lcControlName)
+*!*			WITH loControl
+*!*				.picture 	= lcFile
+*!*				.stretch 	= 2
+*!*				.left 		= lnLeft
+*!*				.top 		= lnTop
+*!*				.width 		= lnAncho
+*!*				.height 	= lnAlto
+*!*				.visible 	= .t.
+*!*			ENDWITH
+*!*			*----------
+
+*!*			i = i + 1
+*!*		ENDDO
+*!*	ENDIF
+  
+
 *!*	Clear
 *!*	do f:\desarrollo\github\jsonfox\jsonfox.app
 
@@ -126,7 +192,6 @@ Define Class Kvp as collection
 
 				Do Case
 				case loToken.cType == 'LBRACKET'
-					Set Step On
 					i = i + 1 && skip LBRACKET ([)
 					lvValue = CreateObject("Collection")
 					If this.oTokens(i).cType != 'RBRACKET'
@@ -371,7 +436,7 @@ var Spec = [
 
     // --------------------------------------
     // Expressions
-    [/^\$\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)/,'EXPRESSION'],
+    [/^\$\(.+\)/,'EXPRESSION'],
 
     // --------------------------------------
     // Builtin functions
@@ -460,7 +525,7 @@ function _getNextToken() {
                 var matchCollection;
                 var replaceWith;
                 literal = tokenValue.slice(2, -1);
-                while ((matchCollection = /this\.(\w+|(["'])([^"']*)\2)/.exec(literal)) !== null) {
+                while ((matchCollection = /[Tt][Hh][Ii][Ss]\.(\w+|(["'])([^"']*)\2)/.exec(literal)) !== null) {
                     if (/^["']/.test(matchCollection[1])) {
                         replaceWith = matchCollection[1].slice(1, -1);
                     } else {
@@ -512,9 +577,25 @@ function parse(source, debug) {
 }
 /*
 var source = `
-deportes = ["Baloncesto", .T., .F., $(this.'nombre largo')]
-usuarios = get("http://localhost:8080/users")
-personas = json('{"nombre": "Irwin"}')
+-------------------- PROPIEDADES AUXILIARES --------------------
+TOP = $(_SCREEN.UTILIDADES.EJECUTARSBSCRIPT("ALTO-DISPONIBLE"))
+UBICACION = $(P_DIRECTO + '\GRAFICO\')
+----------------------------------------------------------------
+
+-- LISTADO DE LOGOS ADICIONALES
+LOGO1.NOMBRE    = "logo-kit-digital-1.png"
+LOGO1.UBICACION = $(THIS.UBICACION)
+LOGO1ANCHO      = 300
+LOGO1.ALTO      = 97
+LOGO1.LEFT      = 0
+LOGO1.TOP       = $(THIS.TOP)
+
+LOGO2.NOMBRE    = "logo-kit-digital-2.png"
+LOGO2.UBICACION = $(THIS.UBICACION)
+LOGO2.ANCHO     = 336
+LOGO2.ALTO      = 189
+LOGO2.LEFT      = $(THIS.LOGO1ANCHO)
+LOGO2.TOP       = $(THIS.TOP)
 `;
 parse(source, true);
 */
