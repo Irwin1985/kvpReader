@@ -19,8 +19,25 @@
 *!*	  LOGO2.LEFT      = $(THIS."LOGO1.ANCHO"+8)
 *!*	  LOGO2.TOP       = $(THIS.TOP)
 *!*	ENDTEXT
+*!*	TEXT TO lcCode NOSHOW
+*!*	  -------------------- PROPIEDADES AUXILIARES --------------------
+*!*	  TOP = 20
+*!*	  UBICACION = 'C:\VCOOPE\GRAFICO\'
+*!*	  ----------------------------------------------------------------
 
+*!*	  -- LISTADO DE LOGOS ADICIONALES
+*!*	  LOGO1.NOMBRE    = "logo-kit-digital-1.png"
+*!*	  LOGO1.UBICACION = $(THIS.UBICACION)
+*!*	  LOGO1.ANCHO     = 300
+*!*	  LOGO1.ALTO      = 97
+*!*	  LOGO1.LEFT      = 0
+*!*	  LOGO1.TOP       = $(THIS.TOP)
+
+*!*	ENDTEXT
+*!*	Public loKvp
 *!*	loKvp = CreateObject("Kvp", lcCode)
+
+
 *!*	IF loKvp.count > 0
 *!*		
 *!*		LOCAL i, lcNombre, loCtx, lcControlName, loControl, lcFile
@@ -117,6 +134,7 @@ Define Class Kvp as collection
 	cLastError = ''
 	bShowErrors = .f.
 	oKeys = .null.
+	oObjects = .null.
 
 	Procedure init(tcConfigFile)	
 		If !Empty(tcConfigFile)
@@ -138,6 +156,22 @@ Define Class Kvp as collection
 		EndIf
 		Return this.item(tvIndexOrKey)
 	EndFunc
+	
+	Function GetPattern(tcPattern)
+		Local loRegExp, loResult
+		loRegExp = CreateObject("VBScript.RegExp")
+		loResult = CreateObject("Collection")
+		loRegExp.Pattern = tcPattern
+		For each lcKey in this.oKeys
+			Try
+				If loRegExp.Test(lcKey)
+					loResult.Add(this.Get(lcKey))
+				EndIf
+			Catch
+			EndTry			
+		EndFor
+		Return loResult
+	EndFunc
 
 	Function item(tvIndexOrKey)
 		nodefault
@@ -151,7 +185,7 @@ Define Class Kvp as collection
 			Return Space(1)
 		EndIf
 		Return DoDefault(lnIndex)
-	EndFunc
+	EndFunc	
 	
 	procedure parse(tcConfigFile as memo)
 		If Empty(tcConfigFile)
@@ -163,6 +197,7 @@ Define Class Kvp as collection
 
 			lcContent = Iif(File(tcConfigFile), Strconv(Filetostr(tcConfigFile),11), tcConfigFile)
 			this.oKeys = CreateObject("Collection")
+			this.oObjects = CreateObject("Collection")
 			this.oTokens = CreateObject("Collection")
 			this.oScript = Createobject([MSScriptcontrol.scriptcontrol.1])
 			this.oScript.Language = "JScript"
@@ -218,6 +253,19 @@ Define Class Kvp as collection
 				EndCase
 
 				If !Empty(lcKey)
+*!*						* Check for special property name
+*!*						If at('.', lcKey) > 0
+*!*							Local loObject, lcNewKey, lvNewValue
+*!*							lcNewKey = GetWordNum(lcKey,1,'.')
+*!*							loObject = .null.
+*!*							If this.oObjects.GetKey(lcNewKey) > 0
+*!*								loObject = this.oObjects.Item(lcNewKey)
+*!*								this.oObjects.Remove(lcNewKey)
+*!*							EndIf
+*!*							lvNewValue = this.parseCustomObject(lcKey, '.', loObject, lvValue)
+*!*							this.oObjects.Add(lvNewValue, lcNewKey)
+*!*						EndIf
+					
 					If this.GetKey(lcKey) > 0
 						this.Remove(this.GetKey(lcKey))
 					EndIf
@@ -240,6 +288,34 @@ Define Class Kvp as collection
 			EndIf
 		EndTry
 	endproc
+
+*!*		Hidden function parseCustomObject(tcKey as String, tcDelim as Character, toObject as object, tvValue as Variant) as Object
+*!*			* tcKey = prop1.prop2.prop3.prop4
+*!*			Local loObject, i, j, lvProp, loObj
+*!*			If IsNull(toObject)
+*!*				loObject = CreateObject("Collection")
+*!*			Else
+*!*				loObject = toObject
+*!*			EndIf
+*!*			loCurrent = loObject
+*!*			j = GetWordCount(tcKey, tcDelim)
+*!*			For i=2 to j
+*!*				lvProp = GetWordNum(tcKey,i,tcDelim)
+*!*				If i < j				
+*!*					If Empty(loCurrent.GetKey(lvProp))
+*!*						loObj = CreateObject("Collection")
+*!*						loCurrent.Add(loObj, lvProp)
+*!*					Else
+*!*						loObj = loCurrent.Item(lvProp)
+*!*					EndIf
+*!*					loCurrent = loObj
+*!*					loop
+*!*				EndIf
+*!*				loCurrent.Add(tvValue, lvProp)
+*!*			EndFor
+*!*			loCurrent = loObject
+*!*			Return loCurrent
+*!*		EndFunc
 
 	Hidden function parseBuiltin(toToken)
 		Local lcFuncName, loParams, lcParam, loResult
