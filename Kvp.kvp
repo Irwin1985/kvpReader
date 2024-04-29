@@ -1,0 +1,4 @@
+name = "KVP"
+type = "prg"
+repo = "https://raw.githubusercontent.com/Irwin1985/kvpReader/main/kvp.prg"
+version = "0.0.1"
